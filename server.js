@@ -1,6 +1,5 @@
 import express from "express";
 import bodyParser from "body-parser";
-import { MongoClient } from 'mongodb';
 import cors from "cors";
 import connection from './db.cjs';
 import http from "http"; // Assuming this file contains MySQL connection setup
@@ -83,6 +82,29 @@ app.use(bodyParser.json());
           res.status(201).json({ message: 'Message posted successfully' });
       });
   });
+
+  app.get('/user_info', (req, res) => {
+    const { user_id } = req.query; // Extract user_id from req.query
+
+    // Ensure user_id is provided
+    if (!user_id) {
+        return res.status(400).json({ error: 'user_id parameter is required.' });
+    }
+    console.log('Received user_id:', user_id);
+
+    const query = 'SELECT * FROM users WHERE user_id = ?';
+
+    connection.query(query, user_id, (err, result) => {
+        if (err) {
+            console.error('Error fetching details:', err);
+            return res.status(500).json({ error: 'Error fetching Details' });
+        }
+        console.log(result); // Log the result here
+        res.json(result[0]);
+    });
+});
+
+
   
 
     app.get('/events', (req, res) => {
