@@ -1,0 +1,8 @@
+langchain
+langchain_core
+pymysql
+google.generativeai
+pytz
+ipython
+psycopg2
+langgraph
